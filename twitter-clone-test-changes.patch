@@ -1,0 +1,635 @@
+From bb5e8a2dd8ed99761796a40bcb03c813e60eff3c Mon Sep 17 00:00:00 2001
+From: "devin-ai-integration[bot]"
+ <158243242+devin-ai-integration[bot]@users.noreply.github.com>
+Date: Thu, 19 Sep 2024 01:32:56 +0000
+Subject: [PATCH 1/7] Temporary change for PR testing
+
+---
+ README.md | 5 +++++
+ 1 file changed, 5 insertions(+)
+ create mode 100644 README.md
+
+diff --git a/README.md b/README.md
+new file mode 100644
+index 0000000..9fafe4d
+--- /dev/null
++++ b/README.md
+@@ -0,0 +1,5 @@
++# Twitter Clone Project
++
++This is a Twitter clone project for demonstration purposes.
++
++Temporary change for pull request testing.
+-- 
+2.34.1
+
+
+From 6e573295b6cf155c8d4e8f945e13b44d298b3ae8 Mon Sep 17 00:00:00 2001
+From: "devin-ai-integration[bot]"
+ <158243242+devin-ai-integration[bot]@users.noreply.github.com>
+Date: Thu, 19 Sep 2024 01:36:01 +0000
+Subject: [PATCH 2/7] Move workflow file to correct directory
+
+---
+ .github/workflows/public_workflow.yml | 39 +++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 .github/workflows/public_workflow.yml
+
+diff --git a/.github/workflows/public_workflow.yml b/.github/workflows/public_workflow.yml
+new file mode 100644
+index 0000000..31cc691
+--- /dev/null
++++ b/.github/workflows/public_workflow.yml
+@@ -0,0 +1,39 @@
++name: Tests
++
++on: [pull_request]
++
++permissions:
++  contents: read
++
++jobs:
++  build:
++    runs-on: ubuntu-latest
++
++    services:
++      postgres:
++        image: postgres:latest
++        env:
++          POSTGRES_USER: postgres
++          POSTGRES_PASSWORD: postgres
++          POSTGRES_DB: warbler-test
++        ports:
++          - 5432:5432
++        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
++
++    steps:
++    - uses: actions/checkout@v3
++      with:
++        fetch-depth: 0
++    - name: Set up Python 3.7.13
++      uses: actions/setup-python@v3
++      with:
++        python-version: "3.7.13"
++    - name: Install dependencies
++      run: |
++        python -m pip install --upgrade pip
++        pip install flake8 pytest bs4 Flask-Migrate psycopg2-binary
++        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
++    - name: Run the tests
++      run: |
++        export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/warbler-test"
++        pytest
+-- 
+2.34.1
+
+
+From 5bdd5575b18bc672088af4ff6edcc3161a95ea8d Mon Sep 17 00:00:00 2001
+From: "devin-ai-integration[bot]"
+ <158243242+devin-ai-integration[bot]@users.noreply.github.com>
+Date: Thu, 19 Sep 2024 02:42:41 +0000
+Subject: [PATCH 3/7] Add sample test file to verify test collection
+
+---
+ test_sample.py | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 test_sample.py
+
+diff --git a/test_sample.py b/test_sample.py
+new file mode 100644
+index 0000000..6782c86
+--- /dev/null
++++ b/test_sample.py
+@@ -0,0 +1,2 @@
++def test_sample():
++    assert True, "This test should always pass"
+-- 
+2.34.1
+
+
+From a996bb0aad6eb76469a6c47f0b79197c65572e0c Mon Sep 17 00:00:00 2001
+From: "devin-ai-integration[bot]"
+ <158243242+devin-ai-integration[bot]@users.noreply.github.com>
+Date: Thu, 19 Sep 2024 02:42:41 +0000
+Subject: [PATCH 4/7] Cherry-pick: Add sample test file to verify test
+ collection
+
+---
+ public_workflow.yml | 39 ---------------------------------------
+ 1 file changed, 39 deletions(-)
+ delete mode 100644 public_workflow.yml
+
+diff --git a/public_workflow.yml b/public_workflow.yml
+deleted file mode 100644
+index 31cc691..0000000
+--- a/public_workflow.yml
++++ /dev/null
+@@ -1,39 +0,0 @@
+-name: Tests
+-
+-on: [pull_request]
+-
+-permissions:
+-  contents: read
+-
+-jobs:
+-  build:
+-    runs-on: ubuntu-latest
+-
+-    services:
+-      postgres:
+-        image: postgres:latest
+-        env:
+-          POSTGRES_USER: postgres
+-          POSTGRES_PASSWORD: postgres
+-          POSTGRES_DB: warbler-test
+-        ports:
+-          - 5432:5432
+-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+-
+-    steps:
+-    - uses: actions/checkout@v3
+-      with:
+-        fetch-depth: 0
+-    - name: Set up Python 3.7.13
+-      uses: actions/setup-python@v3
+-      with:
+-        python-version: "3.7.13"
+-    - name: Install dependencies
+-      run: |
+-        python -m pip install --upgrade pip
+-        pip install flake8 pytest bs4 Flask-Migrate psycopg2-binary
+-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+-    - name: Run the tests
+-      run: |
+-        export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/warbler-test"
+-        pytest
+-- 
+2.34.1
+
+
+From a9e5ea8c6c58ab1cbbc526441084db8e80b7ab43 Mon Sep 17 00:00:00 2001
+From: "devin-ai-integration[bot]"
+ <158243242+devin-ai-integration[bot]@users.noreply.github.com>
+Date: Thu, 19 Sep 2024 03:42:32 +0000
+Subject: [PATCH 5/7] Move test file to tests directory for proper discovery
+
+---
+ tests/test_sample.py | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 tests/test_sample.py
+
+diff --git a/tests/test_sample.py b/tests/test_sample.py
+new file mode 100644
+index 0000000..6782c86
+--- /dev/null
++++ b/tests/test_sample.py
+@@ -0,0 +1,2 @@
++def test_sample():
++    assert True, "This test should always pass"
+-- 
+2.34.1
+
+
+From abebdbbe25b5b854ddeede5f62c875cf36bd8580 Mon Sep 17 00:00:00 2001
+From: "devin-ai-integration[bot]"
+ <158243242+devin-ai-integration[bot]@users.noreply.github.com>
+Date: Thu, 19 Sep 2024 04:10:53 +0000
+Subject: [PATCH 6/7] Finalize cleanup and prepare for submission
+
+---
+ test_sample.py | 2 --
+ 1 file changed, 2 deletions(-)
+ delete mode 100644 test_sample.py
+
+diff --git a/test_sample.py b/test_sample.py
+deleted file mode 100644
+index 6782c86..0000000
+--- a/test_sample.py
++++ /dev/null
+@@ -1,2 +0,0 @@
+-def test_sample():
+-    assert True, "This test should always pass"
+-- 
+2.34.1
+
+
+From e9a3844edb21819493fdff9a276c156af5296b43 Mon Sep 17 00:00:00 2001
+From: "devin-ai-integration[bot]"
+ <158243242+devin-ai-integration[bot]@users.noreply.github.com>
+Date: Sun, 22 Sep 2024 00:18:21 +0000
+Subject: [PATCH 7/7] Include setup instructions and dependencies
+
+- Add COMPREHENSIVE_GUIDE.md for setup
+- Include SETUP_INSTRUCTIONS.md
+- Add requirements.txt for dependencies
+---
+ COMPREHENSIVE_GUIDE.md | 204 +++++++++++++++++++++++++++++++++++++++++
+ SETUP_INSTRUCTIONS.md  | 165 +++++++++++++++++++++++++++++++++
+ requirements.txt       |  11 +++
+ 3 files changed, 380 insertions(+)
+ create mode 100644 COMPREHENSIVE_GUIDE.md
+ create mode 100644 SETUP_INSTRUCTIONS.md
+ create mode 100644 requirements.txt
+
+diff --git a/COMPREHENSIVE_GUIDE.md b/COMPREHENSIVE_GUIDE.md
+new file mode 100644
+index 0000000..2adb8ad
+--- /dev/null
++++ b/COMPREHENSIVE_GUIDE.md
+@@ -0,0 +1,204 @@
++# Twitter Clone Project: Comprehensive Guide
++
++## Table of Contents
++1. [Project Overview](#project-overview)
++2. [Prerequisites](#prerequisites)
++3. [Project Structure](#project-structure)
++4. [Setup Instructions](#setup-instructions)
++   - [Set up the project](#step-1-set-up-the-project)
++   - [Set up a virtual environment](#step-2-set-up-a-virtual-environment)
++   - [Install dependencies](#step-3-install-dependencies)
++   - [Set up the database](#step-4-set-up-the-database)
++   - [Set up GitHub Actions workflow](#step-5-set-up-github-actions-workflow)
++   - [Set up a sample test](#step-6-set-up-a-sample-test)
++   - [Initialize Git repository](#step-7-initialize-git-repository)
++   - [Run the tests](#step-8-run-the-tests)
++5. [Dependencies](#dependencies)
++6. [GitHub Actions Workflow](#github-actions-workflow)
++7. [Sample Test](#sample-test)
++8. [Next Steps](#next-steps)
++
++## Project Overview
++
++This is a Twitter clone project for demonstration purposes. It serves as a template for building a social media application using Python and Flask.
++
++## Prerequisites
++
++Before you begin, ensure you have the following installed on your system:
++- Python 3.7.13
++- PostgreSQL
++- Visual Studio Code (VSCode)
++- Git
++
++## Project Structure
++
++The project structure should look like this:
++
++```
++twitter-clone-test/
++├── .github/
++│   └── workflows/
++│       └── public_workflow.yml
++├── tests/
++│   └── test_sample.py
++├── README.md
++├── requirements.txt
++├── SETUP_INSTRUCTIONS.md
++└── COMPREHENSIVE_GUIDE.md (this file)
++```
++
++## Setup Instructions
++
++Follow these steps to set up the Twitter clone project from scratch in Visual Studio Code (VSCode).
++
++### Step 1: Set up the project
++
++1. Open VSCode and create a new folder named `twitter-clone-test`.
++2. Open a terminal in VSCode and navigate to the project folder.
++
++### Step 2: Set up a virtual environment
++
++1. Create a virtual environment:
++   ```
++   python -m venv venv
++   ```
++2. Activate the virtual environment:
++   - On Windows: `venv\Scripts\activate`
++   - On macOS/Linux: `source venv/bin/activate`
++
++### Step 3: Install dependencies
++
++1. Create a `requirements.txt` file in the root directory with the content from the [Dependencies](#dependencies) section.
++2. Install the dependencies:
++   ```
++   pip install -r requirements.txt
++   ```
++
++### Step 4: Set up the database
++
++1. Create a new PostgreSQL database named `warbler-test`.
++2. Update the database connection string in your application configuration to:
++   ```
++   postgresql://postgres:postgres@localhost:5432/warbler-test
++   ```
++
++### Step 5: Set up GitHub Actions workflow
++
++1. Create a `.github/workflows` directory in your project root.
++2. Create a file named `public_workflow.yml` in the `.github/workflows` directory with the content from the [GitHub Actions Workflow](#github-actions-workflow) section.
++
++### Step 6: Set up a sample test
++
++1. Create a `tests` directory in your project root.
++2. Create a file named `test_sample.py` in the `tests` directory with the content from the [Sample Test](#sample-test) section.
++
++### Step 7: Initialize Git repository
++
++1. Initialize a new Git repository:
++   ```
++   git init
++   ```
++2. Create a `.gitignore` file to exclude unnecessary files:
++   ```
++   venv/
++   __pycache__/
++   *.pyc
++   .pytest_cache/
++   ```
++3. Make your initial commit:
++   ```
++   git add .
++   git commit -m "Initial commit"
++   ```
++
++### Step 8: Run the tests
++
++1. Run the tests using pytest:
++   ```
++   pytest
++   ```
++
++## Dependencies
++
++The project uses the following dependencies, which are listed in the `requirements.txt` file:
++
++```
++Flask==2.0.1
++Flask-SQLAlchemy==2.5.1
++Flask-WTF==0.15.1
++Flask-Login==0.5.0
++Flask-Migrate==3.1.0
++SQLAlchemy==1.4.23
++Werkzeug==2.0.1
++psycopg2-binary==2.9.1
++pytest==6.2.5
++flake8==3.9.2
++beautifulsoup4==4.10.0
++```
++
++## GitHub Actions Workflow
++
++The project includes a GitHub Actions workflow for running tests on pull requests. The workflow is defined in `.github/workflows/public_workflow.yml`:
++
++```yaml
++name: Tests
++
++on: [pull_request]
++
++permissions:
++  contents: read
++
++jobs:
++  build:
++    runs-on: ubuntu-latest
++
++    services:
++      postgres:
++        image: postgres:latest
++        env:
++          POSTGRES_USER: postgres
++          POSTGRES_PASSWORD: postgres
++          POSTGRES_DB: warbler-test
++        ports:
++          - 5432:5432
++        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
++
++    steps:
++    - uses: actions/checkout@v3
++      with:
++        fetch-depth: 0
++    - name: Set up Python 3.7.13
++      uses: actions/setup-python@v3
++      with:
++        python-version: "3.7.13"
++    - name: Install dependencies
++      run: |
++        python -m pip install --upgrade pip
++        pip install flake8 pytest bs4 Flask-Migrate psycopg2-binary
++        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
++    - name: Run the tests
++      run: |
++        export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/warbler-test"
++        pytest
++```
++
++## Sample Test
++
++A sample test is included in `tests/test_sample.py`:
++
++```python
++def test_sample():
++    assert True, "This test should always pass"
++```
++
++## Next Steps
++
++After setting up the project, consider the following next steps:
++
++- Implement the core functionality of your Twitter clone using Flask and SQLAlchemy.
++- Create additional tests for your application's features.
++- Set up a development database and configure your application to use it.
++- Implement user authentication and authorization using Flask-Login.
++- Create templates for your views using a templating engine like Jinja2.
++
++Remember to commit your changes regularly and push them to a remote repository if you're using GitHub or a similar platform.
+diff --git a/SETUP_INSTRUCTIONS.md b/SETUP_INSTRUCTIONS.md
+new file mode 100644
+index 0000000..13975cb
+--- /dev/null
++++ b/SETUP_INSTRUCTIONS.md
+@@ -0,0 +1,165 @@
++# Twitter Clone Project Setup Instructions
++
++This guide will walk you through setting up the Twitter clone project from scratch in Visual Studio Code (VSCode).
++
++## Prerequisites
++
++- Python 3.7.13 installed on your system
++- PostgreSQL installed and running
++- Visual Studio Code installed
++- Git installed
++
++## Project Structure
++
++Create the following project structure:
++
++```
++twitter-clone-test/
++├── .github/
++│   └── workflows/
++│       └── public_workflow.yml
++├── tests/
++│   └── test_sample.py
++├── README.md
++├── requirements.txt
++└── SETUP_INSTRUCTIONS.md (this file)
++```
++
++## Step 1: Set up the project
++
++1. Open VSCode and create a new folder named `twitter-clone-test`.
++2. Open a terminal in VSCode and navigate to the project folder.
++
++## Step 2: Set up a virtual environment
++
++1. Create a virtual environment:
++   ```
++   python -m venv venv
++   ```
++2. Activate the virtual environment:
++   - On Windows: `venv\Scripts\activate`
++   - On macOS/Linux: `source venv/bin/activate`
++
++## Step 3: Install dependencies
++
++1. Create a `requirements.txt` file in the root directory with the following content:
++
++   ```
++   Flask==2.0.1
++   Flask-SQLAlchemy==2.5.1
++   Flask-WTF==0.15.1
++   Flask-Login==0.5.0
++   Flask-Migrate==3.1.0
++   SQLAlchemy==1.4.23
++   Werkzeug==2.0.1
++   psycopg2-binary==2.9.1
++   pytest==6.2.5
++   flake8==3.9.2
++   beautifulsoup4==4.10.0
++   ```
++
++2. Install the dependencies:
++   ```
++   pip install -r requirements.txt
++   ```
++
++## Step 4: Set up the database
++
++1. Create a new PostgreSQL database named `warbler-test`.
++2. Update the database connection string in your application configuration to:
++   ```
++   postgresql://postgres:postgres@localhost:5432/warbler-test
++   ```
++
++## Step 5: Set up GitHub Actions workflow
++
++1. Create a `.github/workflows` directory in your project root.
++2. Create a file named `public_workflow.yml` in the `.github/workflows` directory with the following content:
++
++   ```yaml
++   name: Tests
++
++   on: [pull_request]
++
++   permissions:
++     contents: read
++
++   jobs:
++     build:
++       runs-on: ubuntu-latest
++
++       services:
++         postgres:
++           image: postgres:latest
++           env:
++             POSTGRES_USER: postgres
++             POSTGRES_PASSWORD: postgres
++             POSTGRES_DB: warbler-test
++           ports:
++             - 5432:5432
++           options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
++
++       steps:
++       - uses: actions/checkout@v3
++         with:
++           fetch-depth: 0
++       - name: Set up Python 3.7.13
++         uses: actions/setup-python@v3
++         with:
++           python-version: "3.7.13"
++       - name: Install dependencies
++         run: |
++           python -m pip install --upgrade pip
++           pip install flake8 pytest bs4 Flask-Migrate psycopg2-binary
++           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
++       - name: Run the tests
++         run: |
++           export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/warbler-test"
++           pytest
++   ```
++
++## Step 6: Set up a sample test
++
++1. Create a `tests` directory in your project root.
++2. Create a file named `test_sample.py` in the `tests` directory with the following content:
++
++   ```python
++   def test_sample():
++       assert True, "This test should always pass"
++   ```
++
++## Step 7: Initialize Git repository
++
++1. Initialize a new Git repository:
++   ```
++   git init
++   ```
++2. Create a `.gitignore` file to exclude unnecessary files:
++   ```
++   venv/
++   __pycache__/
++   *.pyc
++   .pytest_cache/
++   ```
++3. Make your initial commit:
++   ```
++   git add .
++   git commit -m "Initial commit"
++   ```
++
++## Step 8: Run the tests
++
++1. Run the tests using pytest:
++   ```
++   pytest
++   ```
++
++## Next steps
++
++- Implement the core functionality of your Twitter clone using Flask and SQLAlchemy.
++- Create additional tests for your application's features.
++- Set up a development database and configure your application to use it.
++- Implement user authentication and authorization using Flask-Login.
++- Create templates for your views using a templating engine like Jinja2.
++
++Remember to commit your changes regularly and push them to a remote repository if you're using GitHub or a similar platform.
+diff --git a/requirements.txt b/requirements.txt
+new file mode 100644
+index 0000000..2c032f1
+--- /dev/null
++++ b/requirements.txt
+@@ -0,0 +1,11 @@
++Flask==2.0.1
++Flask-SQLAlchemy==2.5.1
++Flask-WTF==0.15.1
++Flask-Login==0.5.0
++Flask-Migrate==3.1.0
++SQLAlchemy==1.4.23
++Werkzeug==2.0.1
++psycopg2-binary==2.9.1
++pytest==6.2.5
++flake8==3.9.2
++beautifulsoup4==4.10.0
+-- 
+2.34.1
+
